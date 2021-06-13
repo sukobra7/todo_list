@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo_list/models/task.dart';
 
 class TodoListPage extends StatelessWidget {
 
@@ -8,16 +9,19 @@ class TodoListPage extends StatelessWidget {
       itemCount: snapshot.docs.length,
       itemBuilder: (context, index) {
         final doc = snapshot.docs[index];
+        final task = Task.fromSnapshot(doc);
         // QueryDocumentSnapshot
         // QuerySnapshotが持っているデータの中身一つ一つを持っています
-        final Map map = doc.data();
-        return ListTile(
-            title: Text(map['title'])
-        );
+       return _buildListItem(task);
       }
     );
   }
 
+  Widget _buildListItem(Task task) {
+    return ListTile(
+      title: Text(task.title)
+    );
+}
 
   Widget _buildBody(BuildContext context) {
 
