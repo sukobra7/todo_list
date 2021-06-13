@@ -17,9 +17,22 @@ class TodoListPage extends StatelessWidget {
     );
   }
 
+  void _deleteTask(Task task) async {
+    await FirebaseFirestore.instance.collection("todos")
+        .doc(task.taskId)
+        .delete();
+  }
+
   Widget _buildListItem(Task task) {
-    return ListTile(
-      title: Text(task.title)
+    return Dismissible(
+      key: Key(task.taskId),
+      onDismissed: (direction) {
+        _deleteTask(task);
+      },
+      background: Container(color: Colors.red),
+      child: ListTile(
+        title: Text(task.title)
+      ),
     );
 }
 
